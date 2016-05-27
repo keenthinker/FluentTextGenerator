@@ -1,8 +1,8 @@
 # FluentTextGenerator
 
-Configurable fluent API for random text generation.
+##Configurable fluent API for random text generation##
 
------------------------------------------------------
+###Basic usage###
 This library can be used to create random strings, for example for automated key generation.
 
 The simplest way to generate a random string is to use the default library configuration:
@@ -69,3 +69,25 @@ The configuration options can also be used individually or in a combination:
 						.IncludeSpecialCharacters(false)
 						.Generate()); // jYsF3tv
 
+###More options###
+
+The API allows you to overwrite the list of special characters using the 
+
+	IncludeSpecialCharacters(yes, specialCharacters)
+	
+overload method. By default the second parameter *specialCharacters* is set to an empty string - the generator uses the internally defined default list: 
+
+	.,+-*/!?;:{}()[]%$&~#@|><
+	
+If the second parameter is set, then the characters in it are used as special characters:
+
+	Console.WriteLine(new FluentTextGenerator()
+						.Configure()
+						.MinLength(5)
+						.MaxLength(10)
+						.IncludeCapitalCharacters(false)
+						.IncludeNumbers(false)
+						.IncludeSmallCharacters(false)
+						.IncludeSpecialCharacters(true, "+-")
+						.Generate());
+	// Output: +----++-++
