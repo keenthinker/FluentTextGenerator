@@ -67,7 +67,8 @@ The configuration options can also be used individually or in a combination:
 						.MinLength(5)
 						.MaxLength(10)
 						.IncludeSpecialCharacters(false)
-						.Generate()); // jYsF3tv
+						.Generate()); 
+	// Output: jYsF3tv
 
 ###More options###
 
@@ -91,3 +92,34 @@ If the second parameter is set, then the characters in it are used as special ch
 						.IncludeSpecialCharacters(true, "+-")
 						.Generate());
 	// Output: +----++-++
+	
+The API allows you to exclude characters from the alphabet used for the string generation:
+
+	Console.WriteLine(new FluentTextGenerator()
+						.Configure()
+						.MinLength(5)
+						.MaxLength(10)
+						.IncludeCapitalCharacters(false)
+						.IncludeNumbers(false)
+						.IncludeSmallCharacters(false)
+						.IncludeSpecialCharacters(true, "+-.!")
+						.ExcludeCharacters("-.")
+						.Generate());
+	// Output: !+!!+!++!
+	
+The API allows you to replace characters **after** the generation has completed:
+
+	Console.WriteLine(new FluentTextGenerator()
+						.Configure()
+						.MinLength(5)
+						.MaxLength(10)
+						.IncludeCapitalCharacters(false)
+						.IncludeNumbers(false)
+						.IncludeSmallCharacters(false)
+						.IncludeSpecialCharacters(true, "+-.!")
+						.Replace(".", "~")
+						.Replace("+", "plus")
+						.Generate());
+	// Output: ~!~plusplus~!plus
+	
+**Please note, that with the replace operation it is possible to exceed the configured maximal text length!**
