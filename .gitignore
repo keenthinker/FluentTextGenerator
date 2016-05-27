@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/FluentTextGenerator/v14/.suo
+/FluentTextGenerator/obj
+/FluentTextGenerator/FluentTextGenerator.csproj.user
+/FluentTextGeneratorLibraryTests/bin/Debug
+/FluentTextGeneratorLibraryTests/obj/Debug
+/FluentTextGenerator/bin/x86/Debug
+/FluentTextGenerator/bin/Debug
