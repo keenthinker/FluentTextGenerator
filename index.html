@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Fluenttextgenerator by keenthinker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Fluenttextgenerator</h1>
+      <h2 class="project-tagline">Configurable fluent API for random text generation</h2>
+      <a href="https://github.com/keenthinker/FluentTextGenerator" class="btn">View on GitHub</a>
+      <a href="https://github.com/keenthinker/FluentTextGenerator/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/keenthinker/FluentTextGenerator/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="fluenttextgenerator" class="anchor" href="#fluenttextgenerator" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>FluentTextGenerator</h1>
+
+<h2>
+<a id="configurable-fluent-api-for-random-text-generation" class="anchor" href="#configurable-fluent-api-for-random-text-generation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configurable fluent API for random text generation</h2>
+
+<h3>
+<a id="basic-usage" class="anchor" href="#basic-usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Basic usage</h3>
+
+<p>This library can be used to create random strings, for example for automated key generation.</p>
+
+<p>The simplest way to generate a random string is to use the default library configuration:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator().Configure().Generate()); // BuJZKhWk3BQsA{O1ho-...
+</code></pre>
+
+<p>The default configuration generates strings using:</p>
+
+<ul>
+<li>random minimal length (a value between 1 and 250)</li>
+<li>random maximal length (a value between 1 and 250; &gt;= the minimal length)</li>
+<li>an alphabet consisting of
+
+<ul>
+<li>small characters a-z</li>
+<li>capital characters A-Z</li>
+<li>numbers 0-9</li>
+<li>special symbols .,+-*/!?;:{}()[]%$&amp;~#@|&gt;&lt;</li>
+</ul>
+</li>
+</ul>
+
+<p>Every option can be explicitely set using the fluent API:</p>
+
+<ul>
+<li>
+<em>MinLength(int min)</em>
+
+<ul>
+<li>default is 0, meaning random between 1 and 250</li>
+</ul>
+</li>
+<li>
+<em>MaxLength(int max)</em>
+
+<ul>
+<li>default is 0, meaning random between 1 and 250, but &gt;= MinLength</li>
+</ul>
+</li>
+<li>
+<em>IncludeCapitalCharacters(bool yes)</em> 
+
+<ul>
+<li>default is true</li>
+</ul>
+</li>
+<li>
+<em>IncludeSmallCharacters(bool yes)</em>
+
+<ul>
+<li>default is true</li>
+</ul>
+</li>
+<li>
+<em>IncludeNumbers(bool yes)</em>
+
+<ul>
+<li>default is true</li>
+</ul>
+</li>
+<li>
+<em>IncludeSpecialCharacters(bool yes)</em>
+
+<ul>
+<li>default is true</li>
+</ul>
+</li>
+</ul>
+
+<p>This call:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+            .Configure()
+            .MinLength()
+            .MaxLength()
+            .IncludeCapitalCharacters()
+            .IncludeSmallCharacters()
+            .IncludeNumbers()
+            .IncludeSpecialCharacters()
+            .Generate());
+</code></pre>
+
+<p>is the same as the first example:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator().Configure().Generate());
+</code></pre>
+
+<p>Using the fluent API the configuration could be set from some custom settings:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+            .Configure()
+            .MinLength(min)
+            .MaxLength(max)
+            .IncludeCapitalCharacters(includeCapitalCharacters)
+            .IncludeSmallCharacters(includeSmallCharacters)
+            .IncludeNumbers(includeNumbers)
+            .IncludeSpecialCharacters(includeSpecialCharacters)
+            .Generate());
+</code></pre>
+
+<p>The configuration options can also be used individually or in a combination:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+                    .Configure()
+                    .MinLength(5)
+                    .MaxLength(10)
+                    .IncludeSpecialCharacters(false)
+                    .Generate()); 
+// Output: jYsF3tv
+</code></pre>
+
+<h3>
+<a id="more-options" class="anchor" href="#more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More options</h3>
+
+<p>The API allows you to overwrite the list of special characters using the </p>
+
+<pre><code>IncludeSpecialCharacters(yes, specialCharacters)
+</code></pre>
+
+<p>overload method. By default the second parameter <em>specialCharacters</em> is set to an empty string - the generator uses the internally defined default list: </p>
+
+<pre><code>.,+-*/!?;:{}()[]%$&amp;~#@|&gt;&lt;
+</code></pre>
+
+<p>If the second parameter is set, then the characters in it are used as special characters:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+                    .Configure()
+                    .MinLength(5)
+                    .MaxLength(10)
+                    .IncludeCapitalCharacters(false)
+                    .IncludeNumbers(false)
+                    .IncludeSmallCharacters(false)
+                    .IncludeSpecialCharacters(true, "+-")
+                    .Generate());
+// Output: +----++-++
+</code></pre>
+
+<p>The API allows you to exclude characters from the alphabet used for the string generation:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+                    .Configure()
+                    .MinLength(5)
+                    .MaxLength(10)
+                    .IncludeCapitalCharacters(false)
+                    .IncludeNumbers(false)
+                    .IncludeSmallCharacters(false)
+                    .IncludeSpecialCharacters(true, "+-.!")
+                    .ExcludeCharacters("-.")
+                    .Generate());
+// Output: !+!!+!++!
+</code></pre>
+
+<p>The API allows you to replace characters <strong>after</strong> the generation has completed:</p>
+
+<pre><code>Console.WriteLine(new FluentTextGenerator()
+                    .Configure()
+                    .MinLength(5)
+                    .MaxLength(10)
+                    .IncludeCapitalCharacters(false)
+                    .IncludeNumbers(false)
+                    .IncludeSmallCharacters(false)
+                    .IncludeSpecialCharacters(true, "+-.!")
+                    .Replace(".", "~")
+                    .Replace("+", "plus")
+                    .Generate());
+// Output: ~!~plusplus~!plus
+</code></pre>
+
+<p><strong>Please note, that with the replace operation it is possible to exceed the configured maximal text length!</strong></p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/keenthinker/FluentTextGenerator">Fluenttextgenerator</a> is maintained by <a href="https://github.com/keenthinker">keenthinker</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
