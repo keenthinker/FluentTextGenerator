@@ -47,8 +47,20 @@ This call:
 is the same as the first example:
 
 	Console.WriteLine(new FluentTextGenerator().Configure().Generate());
-	
-The configuration options can be used individually or in a combination:
+
+Using the fluent API the configuration could be set from some custom settings:
+
+	Console.WriteLine(new FluentTextGenerator()
+				.Configure()
+				.MinLength(min)
+				.MaxLength(max)
+				.IncludeCapitalCharacters(includeCapitalCharacters)
+				.IncludeSmallCharacters(includeSmallCharacters)
+				.IncludeNumbers(includeNumbers)
+				.IncludeSpecialCharacters(includeSpecialCharacters)
+				.Generate());
+
+The configuration options can also be used individually or in a combination:
 
 	Console.WriteLine(new FluentTextGenerator()
 						.Configure()
@@ -56,3 +68,4 @@ The configuration options can be used individually or in a combination:
 						.MaxLength(10)
 						.IncludeSpecialCharacters(false)
 						.Generate()); // jYsF3tv
+
