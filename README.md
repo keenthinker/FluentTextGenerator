@@ -7,9 +7,7 @@ This library can be used to create random strings, for example for automated key
 
 The simplest way to generate a random string is to use the default library configuration:
 
-<code>
-  Console.WriteLine(new FluentTextGenerator().Configure().Generate()); // BuJZKhWk3BQsA{O1ho-...
-</code>
+	Console.WriteLine(new FluentTextGenerator().Configure().Generate()); // BuJZKhWk3BQsA{O1ho-...
 
 The default configuration generates strings using:
 - random minimal length (a value between 1 and 250)
@@ -21,15 +19,40 @@ The default configuration generates strings using:
   - special symbols .,+-*/!?;:{}()[]%$&~#@|><
 
 Every option can be explicitely set using the fluent API:
-- MinLength(int min)
+- *MinLength(int min)*
 	- default is 0, meaning random between 1 and 250
-- MaxLength(int max)
+- *MaxLength(int max)*
 	- default is 0, meaning random between 1 and 250, but >= MinLength
-- IncludeCapitalCharacters(bool yes) 
+- *IncludeCapitalCharacters(bool yes)* 
 	- default is true
-- IncludeSmallCharacters(bool yes)
+- *IncludeSmallCharacters(bool yes)*
 	- default is true
-- IncludeNumbers(bool yes)
+- *IncludeNumbers(bool yes)*
 	- default is true
-- IncludeSpecialCharacters(bool yes)
+- *IncludeSpecialCharacters(bool yes)*
 	- default is true
+
+This call:
+
+	Console.WriteLine(new FluentTextGenerator()
+				.Configure()
+				.MinLength()
+				.MaxLength()
+				.IncludeCapitalCharacters()
+				.IncludeSmallCharacters()
+				.IncludeNumbers()
+				.IncludeSpecialCharacters()
+				.Generate());
+
+is the same as the first example:
+
+	Console.WriteLine(new FluentTextGenerator().Configure().Generate());
+	
+The configuration options can be used individually or in a combination:
+
+	Console.WriteLine(new FluentTextGenerator()
+						.Configure()
+						.MinLength(5)
+						.MaxLength(10)
+						.IncludeSpecialCharacters(false)
+						.Generate()); // jYsF3tv
