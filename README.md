@@ -20,3 +20,16 @@ The default configuration generates strings using:
   - numbers 0-9
   - special symbols .,+-*/!?;:{}()[]%$&~#@|><
 
+Every option can be explicitely set using the fluent API:
+- MinLength(int min)
+	- default is 0, meaning random between 1 and 250
+- MaxLength(int max)
+	- default is 0, meaning random between 1 and 250, but >= MinLength
+- IncludeCapitalCharacters(bool yes) 
+	- default is true
+- IncludeSmallCharacters(bool yes)
+	- default is true
+- IncludeNumbers(bool yes)
+	- default is true
+- IncludeSpecialCharacters(bool yes)
+	- default is true
