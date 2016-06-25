@@ -140,6 +140,21 @@
 // Output: jYsF3tv
 </code></pre>
 
+<p>The configuration options can also be provided as a JSON string, passed as parameter to the <pre><code>Configure</code></pre> method. The JSON keys should have the same names as the configuration options. The above example configuration (min=5, max=10, alphabet should contain small, capital and number characters) can be described as follows:</p>
+
+<pre><code>
+	var options = @"{
+				""MinLength"":5,
+				""MaxLength"":10,
+				""IncludeSmallCharacters"": true,
+				""IncludeCapitalCharacters"": true,
+				""IncludeNumbers"": true
+			}";
+	Console.WriteLine(new FluentTextGenerator()
+				.Configure(options)
+				.Generate());
+	// Output: xgWiFe0
+</code></pre>
 <h3>
 <a id="more-options" class="anchor" href="#more-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>More options</h3>
 
