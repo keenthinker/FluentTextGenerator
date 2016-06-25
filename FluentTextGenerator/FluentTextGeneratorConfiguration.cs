@@ -1,6 +1,5 @@
 ﻿using FluentTextGeneratorLibrary.Contracts;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace FluentTextGeneratorLibrary
@@ -20,15 +19,7 @@ namespace FluentTextGeneratorLibrary
         #endregion
 
         #region Private Fields
-        private int minLength = 0;
-        private int maxLength = 0;
-        private bool includeSmallCharacters = false;
-        private bool includeCapitalCharacters = false;
-        private bool includeNumbers = false;
-        private bool includeSpecialCharacters = false;
-        private string specialCharactersList = String.Empty;
-        private string excludeCharactersList = String.Empty;
-        private Dictionary<string, string> replaceDictionary = new Dictionary<string, string>();
+        private readonly FluentTextGeneratorConfigurationOptions options = new FluentTextGeneratorConfigurationOptions();
         private Random random = new Random();
         #endregion
 
@@ -40,16 +31,16 @@ namespace FluentTextGeneratorLibrary
 
         private string buildAlphabet()
         {
-            var specials = iif(!String.IsNullOrEmpty(specialCharactersList), specialCharactersList, alphabetSpecial);
+            var specials = iif(!String.IsNullOrEmpty(options.SpecialCharactersList), options.SpecialCharactersList, alphabetSpecial);
 
             var alphabet = new StringBuilder();
 
-            alphabet.Append(iif(includeSmallCharacters, alphabetSmall, String.Empty));
-            alphabet.Append(iif(includeCapitalCharacters, alphabetCapital, String.Empty));
-            alphabet.Append(iif(includeNumbers, alphabetNumbers, String.Empty));
-            alphabet.Append(iif(includeSpecialCharacters, specials, String.Empty));
+            alphabet.Append(iif(options.IncludeSmallCharacters, alphabetSmall, String.Empty));
+            alphabet.Append(iif(options.IncludeCapitalCharacters, alphabetCapital, String.Empty));
+            alphabet.Append(iif(options.IncludeNumbers, alphabetNumbers, String.Empty));
+            alphabet.Append(iif(options.IncludeSpecialCharacters, specials, String.Empty));
             // exclude characters
-            foreach (var character in excludeCharactersList.Trim())
+            foreach (var character in options.ExcludeCharactersList.Trim())
             {
                 alphabet.Replace(character.ToString(), String.Empty);
             }
@@ -61,8 +52,9 @@ namespace FluentTextGeneratorLibrary
         {
             var lowerBound = 0;
             var upperBound = 0;
+            var minLength = options.MinLength;
             // force min length to be always smaller or equal to max length.
-            maxLength = Math.Max(minLength, maxLength);
+            var maxLength = Math.Max(minLength, options.MaxLength);
             // 
             if ((minLength <= 0) && (maxLength <= 0))
             {
@@ -90,16 +82,14 @@ namespace FluentTextGeneratorLibrary
         }
         #endregion
 
-        #region Constructor
+        #region Constructors
         public FluentTextGeneratorConfiguration()
         {
-            // default values
-            minLength = 0;
-            maxLength = 0;
-            includeSmallCharacters = true;
-            includeCapitalCharacters = true;
-            includeNumbers = true;
-            includeSpecialCharacters = true;
+        }
+
+        public FluentTextGeneratorConfiguration(string optionsAsJson) : this()
+        {
+            this.options = new FluentTextGeneratorConfigurationOptions(optionsAsJson);
         }
         #endregion
 
@@ -112,7 +102,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration MinLength(int min = 0)
         {
-            minLength = iif(min < 0, 0, min);
+            options.MinLength = iif(min < 0, 0, min);
             return this;
         }
 
@@ -123,7 +113,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration MaxLength(int max = 0)
         {
-            maxLength = iif(max < 0, 0, max);
+            options.MaxLength = iif(max < 0, 0, max);
             return this;
         }
 
@@ -134,7 +124,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration IncludeSmallCharacters(bool yes = true)
         {
-            includeSmallCharacters = yes;
+            options.IncludeSmallCharacters = yes;
             return this;
         }
 
@@ -145,7 +135,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration IncludeCapitalCharacters(bool yes = true)
         {
-            includeCapitalCharacters = yes;
+            options.IncludeCapitalCharacters = yes;
             return this;
         }
 
@@ -156,7 +146,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration IncludeNumbers(bool yes = true)
         {
-            includeNumbers = yes;
+            options.IncludeNumbers = yes;
             return this;
         }
 
@@ -170,8 +160,8 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration IncludeSpecialCharacters(bool yes = true, string specialCharacters = "")
         {
-            includeSpecialCharacters = yes;
-            specialCharactersList = specialCharacters;
+            options.IncludeSpecialCharacters = yes;
+            options.SpecialCharactersList = specialCharacters;
             return this;
         }
 
@@ -182,7 +172,7 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration ExcludeCharacters(string excludeCharacters = "")
         {
-            excludeCharactersList = excludeCharacters;
+            options.ExcludeCharactersList = excludeCharacters;
             return this;
         }
 
@@ -194,9 +184,9 @@ namespace FluentTextGeneratorLibrary
         /// <returns>Current configuration instance</returns>
         public IFluentTextGeneratorConfiguration Replace(string oldValue, string newValue)
         {
-            if (!replaceDictionary.ContainsKey(oldValue))
+            if (!options.ReplaceDictionary.ContainsKey(oldValue))
             {
-                replaceDictionary.Add(oldValue, newValue);
+                options.ReplaceDictionary.Add(oldValue, newValue);
             }
             return this;
         }
@@ -214,10 +204,10 @@ namespace FluentTextGeneratorLibrary
         /// <returns>A random string.</returns>
         public string Generate()
         {
-            if (!includeSmallCharacters && 
-                !includeSpecialCharacters && 
-                !includeCapitalCharacters && 
-                !includeNumbers)
+            if (!options.IncludeSmallCharacters && 
+                !options.IncludeSpecialCharacters && 
+                !options.IncludeCapitalCharacters && 
+                !options.IncludeNumbers)
             {
                 throw new Exception("At least one character configuration should be true in order to create an alphabet!");
             }
@@ -243,7 +233,7 @@ namespace FluentTextGeneratorLibrary
                 lowerBound++;
             }
             // replace characters
-            foreach (var replaceItem in replaceDictionary)
+            foreach (var replaceItem in options.ReplaceDictionary)
             {
                 text.Replace(replaceItem.Key, replaceItem.Value);
             }

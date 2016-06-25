@@ -7,9 +7,9 @@ namespace FluentTextGeneratorLibrary
     /// </summary>
     public sealed class FluentTextGenerator : IFluentTextGenerator
     {
-        public IFluentTextGeneratorConfiguration Configure()
+        public IFluentTextGeneratorConfiguration Configure(string optionsAsJson = "")
         {
-            return new FluentTextGeneratorConfiguration();
+            return new FluentTextGeneratorConfiguration(optionsAsJson);
         }
     }
 }

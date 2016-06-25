@@ -131,7 +131,7 @@ namespace FluentTextGeneratorLibraryTests
             // act
             capital = true;
             var text = generateRegardingConfiguration();
-            var actualResult = !text.ToCharArray().Any(ch => !char.IsUpper(ch));
+            var actualResult = text.ToCharArray().All(char.IsUpper);
             // assert
             Assert.AreEqual(expectedResult, actualResult);
         }
@@ -147,6 +147,44 @@ namespace FluentTextGeneratorLibraryTests
             var actualResult = System.Text.RegularExpressions.Regex.IsMatch(text, @"\d");
             // assert
             Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void JsonConfigurationTest()
+        {
+            // arrange
+            var options = @"{
+            					""MaxLength"":5, 
+            					""MinLength"":5, 
+            					""IncludeSmallCharacters"": true
+            				}";
+            // act
+            var generatedText = generator.Configure(options).Generate();
+            // assert
+            Assert.IsTrue(generatedText.Length == 5);
+            Assert.IsTrue(generatedText.ToCharArray().All(char.IsLower));
+        }
+
+        [TestMethod]
+        public void JsonIncorrectConfigurationTest()
+        {
+            // arrange
+            var options = @"""MaxLength"":5, 
+            				""MinLength"":5, 
+            				""IncludeSmall"": ""TEST""";
+            Exception configurationException = null;
+            // act
+            try
+            {
+                var generatedText = generator.Configure(options).Generate();
+            }
+            catch (Exception exception)
+            {
+                configurationException = exception;
+            }
+            // assert
+            Assert.IsNotNull(configurationException);
+            Assert.IsNotNull(configurationException.InnerException);
         }
 
         //[TestMethod]
