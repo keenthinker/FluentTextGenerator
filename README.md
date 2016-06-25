@@ -70,6 +70,20 @@ The configuration options can also be used individually or in a combination:
 						.Generate()); 
 	// Output: jYsF3tv
 
+The configuration options can also be provided as a JSON string, passed as parameter to the *Configure* method. The JSON keys should have the same names as the configuration options. The above example configuration (min=5, max=10, alphabet should contain small, capital and number characters) can be described as follows:
+
+	var options = @"{
+				""MinLength"":5,
+				""MaxLength"":10,
+				""IncludeSmallCharacters"": true,
+				""IncludeCapitalCharacters"": true,
+				""IncludeNumbers"": true
+			}";
+	Console.WriteLine(new FluentTextGenerator()
+				.Configure(options)
+				.Generate());
+	// Output: xgWiFe0
+
 ###More options###
 
 The API allows you to overwrite the list of special characters using the 
